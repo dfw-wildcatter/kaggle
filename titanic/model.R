@@ -1,4 +1,9 @@
-setwd("/Users/michiel/Documents/Kaggle/Titanic/")
+rm(list=ls()) # clean up
+
+require(rstudioapi)
+current_path=rstudioapi::getActiveDocumentContext()$path
+setwd(dirname(current_path)) # set path
+
 chosen.columns <- c("survived","sex","pclass","fare","embarked","sibsp","parch","age","nfs")
 
 train.data <- read.csv("train.csv", stringsAsFactors = F)
@@ -49,7 +54,7 @@ out.sample <- train.data[-(1:800),,drop=F]
 
 require(randomForest)
 
-in.sample.rf <- randomForest(survived ~ ., data=in.sample[,chosen.columns], ntree=1000,
+in.sample.rf <- randomForest(survived ~ ., data=in.sample[,chosen.columns], ntree=10000,
                               keep.forest=T, importance=T, na.action=na.exclude)
 print ( in.sample.rf )
 out.sample.pr<-predict(in.sample.rf,out.sample[,chosen.columns[-1]],predict.all=T)
@@ -68,4 +73,4 @@ test.output <- test.pr$aggregate
 test.output [ is.na ( test.output )] <- 0
 test.output <- ifelse(test.output > 0.5 , 1, 0)
 
-write.table(test.output, row.names=F, col.names = F, file="output.csv" )
+#write.table(test.output, row.names=F, col.names = F, file="output.csv" )
