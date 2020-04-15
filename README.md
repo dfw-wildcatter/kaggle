@@ -1,2 +1,2 @@
 # kaggle
-simple kaggle projects
+kaggle projects
